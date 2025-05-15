@@ -1,0 +1,186 @@
+/* app/docs/[...slug]/DocPage.module.css */
+
+.contentPageWrapperFullWidth {
+    width: 100%; /* Take full width of the main content area from RootLayout */
+    /* Padding will be applied around specific content blocks like articleCard */
+    /* Or add global padding here if all doc pages need it */
+    padding: 1rem; /* Example padding, adjust as needed */
+  }
+  @media (min-width: 768px) { /* md */
+    .contentPageWrapperFullWidth {
+      padding: 1.5rem 2rem;
+    }
+  }
+  @media (min-width: 1024px) { /* lg */
+    .contentPageWrapperFullWidth {
+      padding: 2rem 3rem;
+    }
+  }
+  
+  /* --- Document Header (for the title of the current doc page) --- */
+  .documentHeader {
+    position: sticky;
+    /*
+      IMPORTANT: The 'top' value MUST be the height of your global Navbar.
+      Your global Navbar has h-[65px].
+      Since this header is inside the <main> which has pt-[65px],
+      a 'top: 0' here will stick it to the top of the <main>'s content area,
+      effectively right below the global Navbar.
+    */
+    top: 0;
+    z-index: 5; /* Below global navbar (z-40) and mobile sidebar (z-50) */
+    background-color: rgba(249, 250, 251, 0.9); /* page bg (zinc-50) with opacity */
+    backdrop-filter: blur(8px);
+    /* Use negative margins to span full width if contentPageWrapperFullWidth has padding */
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-bottom: 1px solid #e5e7eb; /* gray-200 */
+  }
+  :global(html.dark) .documentHeader {
+    background-color: rgba(24, 24, 27, 0.9); /* page bg dark (zinc-950) with opacity */
+    border-bottom-color: #3f3f46; /* zinc-700 */
+  }
+  
+  /* Adjust negative margins based on contentPageWrapperFullWidth padding for different breakpoints */
+  @media (min-width: 768px) {
+    .documentHeader {
+      margin-left: -2rem;
+      margin-right: -2rem;
+      margin-bottom: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .documentHeader {
+      margin-left: -3rem;
+      margin-right: -3rem;
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+  
+  
+  .documentHeaderContent {
+    /* This max-width should align with your articleCard's max-width for consistency */
+    max-width: 56rem; /* Same as articleCard max-width */
+    margin: 0 auto; /* Center the title content */
+    padding: 0.75rem 0; /* py-3 */
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .documentTitle {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
+    color: var(--foreground);
+  }
+  @media (min-width: 768px) {
+    .documentTitle {
+      font-size: 1.5rem; /* text-2xl */
+    }
+  }
+  
+  /* --- Article Container & Card (styles from previous example largely apply) --- */
+  .articleContainer {
+    width: 100%;
+  }
+  
+  .articleCard {
+    width: 100%;
+    max-width: 56rem; /* Consistent with documentHeaderContent */
+    margin: 0 auto 2rem auto; /* 0 auto for horizontal centering */
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #171717;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    /* ... other articleCard styles (hover, focus-within, dark mode) remain the same */
+  }
+  :global(html.dark) .articleCard {
+    background-color: #171717;
+    border-color: #3f3f46;
+    color: #ededed;
+  }
+  .articleCard:hover { /* Keep existing hover styles */ }
+  .articleCard:focus-within { /* Keep existing focus-within styles */ }
+  
+  @media (min-width: 640px) { .articleCard { padding: 2rem; } }
+  @media (min-width: 768px) { .articleCard { padding: 2.5rem; } }
+  
+/* DocPage.module.css */
+
+/* ... (Keep existing .editLinkContainer) ... */
+.editLinkContainer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--neutral-200); /* Use CSS vars from globals.css */
+    display: flex;
+    justify-content: flex-end;
+  }
+  :global(html.dark) .editLinkContainer {
+    border-top-color: var(--neutral-700);
+  }
+  
+  .editLink {
+    display: inline-flex; /* Keeps icon and text on the same line */
+    align-items: center; /* Vertically aligns icon with text */
+    gap: 0.375rem; /* space between icon and text (replaces margin on icon) */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* medium */
+    color: var(--neutral-600); /* Using CSS var */
+    text-decoration: none;
+    padding: 0.375rem 0.75rem; /* py-1.5 px-3 for a slightly larger hit area */
+    border-radius: var(--radius-md); /* Use CSS var */
+    background-color: transparent;
+    border: 1px solid transparent; /* For smooth transition with hover border */
+    /* transition properties already in globals.css, but can be specified here too */
+  }
+  
+  /* Hover and Focus states for the link */
+  .editLink:hover {
+    color: var(--accent-light); /* Use accent color for hover */
+    background-color: rgba(var(--accent-rgb, 0, 122, 204), 0.05); /* Subtle bg, define --accent-rgb */
+    border-color: rgba(var(--accent-rgb, 0, 122, 204), 0.2);
+    /* text-decoration: underline; /* Optional: Add underline on hover if desired */
+  }
+  /* For focus-visible, rely on global styles or define explicitly */
+  .editLink:focus-visible {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 2px;
+    /* Or use a box-shadow for focus if preferred and you have .focus-ring-shadow */
+    /* box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent-light); */
+  }
+  
+  :global(html.dark) .editLink {
+    color: var(--neutral-400);
+  }
+  :global(html.dark) .editLink:hover {
+    color: var(--accent-dark);
+    background-color: rgba(var(--accent-rgb-dark, 56, 189, 248), 0.1); /* Define --accent-rgb-dark */
+    border-color: rgba(var(--accent-rgb-dark, 56, 189, 248), 0.3);
+  }
+  :global(html.dark) .editLink:focus-visible {
+    outline-color: var(--accent-dark);
+    /* box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent-dark); */
+  }
+  
+  
+  .editLinkIcon {
+    /* Removed margin-left, using gap on parent .editLink instead */
+    height: 1em;  /* Scale with font size of the link */
+    width: 1em;   /* Scale with font size of the link */
+    opacity: 0.8; /* Slightly more visible by default */
+    /* color: currentColor; /* Ensures icon takes the color of the link text */
+    /* transition for opacity is fine, color will transition with parent link */
+  }
+  /* .editLink:hover .editLinkIcon {
+    opacity: 1; /* Max opacity on hover
+  } */ /* This can be removed if color change is enough */

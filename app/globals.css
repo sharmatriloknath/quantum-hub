@@ -1,26 +1,421 @@
-@import "tailwindcss";
+/* globals.css */
+@import "tailwindcss"; /* Keep if you are using any Tailwind CSS directly that's not processed by PostCSS otherwise */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base color palette - Matches your initial setup */
+  --background-rgb: 255, 255, 255; /* For use with opacity */
+  --foreground-rgb: 23, 23, 23;   /* For use with opacity */
+  --background: rgb(var(--background-rgb)); /* #ffffff */
+  --foreground: rgb(var(--foreground-rgb)); /* #171717 (neutral-900) */
+
+  /* Accent Colors (Example: Sky Blue - used for links, focus rings, etc.) */
+  --accent-light: #0ea5e9; /* sky-500 */
+  --accent-dark: #38bdf8;  /* sky-400 */
+  --accent-hover-light: #0284c7; /* sky-600 */
+  --accent-hover-dark: #0ea5e9;   /* sky-500 */
+
+  /* Neutral Colors (Derived from Tailwind's palette for consistency) */
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827; /* Matches your dark mode page background */
+  --neutral-950: #0a0a0a; /* Matches your dark mode page background */
+
+
+  /* Font Variables - Using Geist as the primary sans-serif for consistency */
+  /* If --font-inter is specifically for UI elements outside prose, keep it, */
+  /* but ensure --font-geist-sans is used by .prose. */
+  /* For this example, I'll assume Geist is the main sans font. */
+  --font-sans: var(--font-geist-sans); /* From your RootLayout */
+  --font-mono: var(--font-geist-mono); /* From your RootLayout */
+  --font-ui: var(--font-inter); /* Explicitly for UI if different from prose */
+
+  /* Consistent Border Radius */
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem;  /* 8px */
+  --radius-xl: 0.75rem; /* 12px */
+
+  /* Consistent Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Apply dark mode variables */
+/* Your @media (prefers-color-scheme: dark) :root { ... } is good for system preference. */
+/* ThemeProvider with attribute="class" will add class="dark" to <html> */
+html.dark {
+  --background-rgb: 10, 10, 10; /* #0a0a0a */
+  --foreground-rgb: 237, 237, 237; /* #ededed */
+
+  --accent-light: #38bdf8;  /* Swap for dark mode */
+  --accent-dark: #0ea5e9;   /* Swap for dark mode */
+  --accent-hover-light: #0ea5e9;
+  --accent-hover-dark: #0284c7;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Base Body Styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans); /* Using Geist as primary defined by --font-sans */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
+}
+
+/* Global Interactive Element Styling */
+a, button, input, textarea, select {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+html.dark *:focus-visible {
+  outline-color: var(--accent-dark);
+}
+/* For elements using shadow for focus, like cards */
+.focus-ring-shadow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent-light);
+}
+html.dark .focus-ring-shadow:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent-dark);
+}
+
+
+/* --- Enhanced Prose Styling --- */
+.prose {
+  /* General prose text */
+  font-size: 1.05rem; /* Slightly smaller than 1.1rem, adjust to taste */
+  line-height: 1.75;
+  color: var(--neutral-800);
+  max-width: none; /* As you had, page.tsx controls article width */
+}
+html.dark .prose {
+  color: var(--neutral-200);
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-sans); /* Ensure headings use the sans font */
+  font-weight: 700; /* Bold */
+  letter-spacing: -0.015em; /* Slightly more tracking */
+  margin-top: 2em;    /* Consistent top margin */
+  margin-bottom: 0.75em; /* Consistent bottom margin */
+  line-height: 1.3;
+  color: var(--neutral-900);
+}
+html.dark .prose h1,
+html.dark .prose h2,
+html.dark .prose h3,
+html.dark .prose h4,
+html.dark .prose h5,
+html.dark .prose h6 {
+  color: var(--neutral-100);
+}
+.prose h1 { font-size: 2.25em; margin-top: 0; } /* First h1 often has no top margin */
+.prose h2 { font-size: 1.75em; }
+.prose h3 { font-size: 1.375em; }
+.prose h4 { font-size: 1.125em; }
+
+/* Paragraphs */
+.prose p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+/* Links */
+.prose a {
+  color: var(--accent-light);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px; /* Slightly more offset */
+  font-weight: 500; /* Medium weight for links */
+}
+.prose a:hover {
+  color: var(--accent-hover-light);
+  text-decoration-thickness: 2px;
+}
+html.dark .prose a {
+  color: var(--accent-dark);
+}
+html.dark .prose a:hover {
+  color: var(--accent-hover-dark);
+}
+
+/* Lists (ul, ol) */
+.prose ul,
+.prose ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.75em; /* More conventional padding for lists */
+}
+.prose li {
+  margin-bottom: 0.5em;
+  padding-left: 0.25em; /* Space between marker and text */
+}
+.prose li::marker {
+  color: var(--neutral-500);
+  font-weight: 500;
+}
+html.dark .prose li::marker {
+  color: var(--neutral-400);
+}
+.prose ul ul, .prose ul ol,
+.prose ol ol, .prose ol ul { /* Nested lists */
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+}
+
+/* Inline Code `code` */
+.prose code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.875em; /* Slightly smaller than surrounding text */
+  background-color: var(--neutral-100);
+  color: var(--neutral-700); /* Or a specific accent like pink/purple */
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--neutral-200);
+}
+html.dark .prose code:not(pre code) {
+  background-color: var(--neutral-800);
+  color: var(--neutral-300);
+  border-color: var(--neutral-700);
+}
+
+/* Code Blocks `<pre>` (wrapper for Shiki or plain code) */
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em; /* Code block text slightly smaller */
+  line-height: 1.6;
+  background-color: var(--neutral-950); /* Dark background for code blocks in both themes often looks good */
+  color: var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 1em 1.25em;
+  overflow-x: auto; /* CRUCIAL for preventing page scroll */
+  margin: 2em 0; /* More vertical spacing */
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--neutral-800); /* Subtle border for dark code block */
+}
+/* If Shiki adds its own .shiki class with background, these might be overridden or need !important */
+/* If Shiki styles the inner <code>, that's fine. */
+html.dark .prose pre {
+  /* Dark theme might already use a dark background, this ensures consistency if needed */
+  background-color: var(--neutral-900); /* Slightly different dark if desired */
+  border-color: var(--neutral-700);
+  color: var(--neutral-200); /* Ensure text color is light */
+}
+
+/* Shiki specific styling (if .shiki is the outermost container Shiki creates) */
+.shiki { /* This should wrap the <pre> from Shiki */
+  margin: 2em 0 !important; /* Ensure spacing */
+  padding: 1em 1.25em !important; /* Ensure padding */
+  border-radius: var(--radius-lg) !important;
+  overflow-x: auto !important; /* CRUCIAL */
+  box-shadow: var(--shadow-md) !important;
+  /* Shiki themes usually set their own background and text colors.
+     If you want to override Shiki's background, do it here.
+     Example: background: var(--neutral-950) !important;
+  */
+}
+/* Ensure Shiki's <pre> tag inside .shiki also allows scrolling if it's the one overflowing */
+.shiki pre {
+  overflow-x: auto !important;
+  background: transparent !important; /* Shiki themes usually color the outer .shiki div or pre */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* Blockquotes */
+.prose blockquote {
+  font-style: italic;
+  margin: 1.75em 0;
+  padding: 0.75em 1.25em;
+  border-left: 3px solid var(--accent-light);
+  background-color: var(--neutral-50);
+  color: var(--neutral-700);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0; /* Rounded on one side */
+}
+html.dark .prose blockquote {
+  border-left-color: var(--accent-dark);
+  background-color: var(--neutral-800); /* Slightly off from main bg */
+  color: var(--neutral-300);
+}
+.prose blockquote p { /* Reset paragraph margins inside blockquote */
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.prose blockquote p:first-child { margin-top: 0; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+/* Horizontal Rules `<hr>` */
+.prose hr {
+  margin: 3em auto; /* Generous spacing for a clear break */
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, transparent, var(--neutral-300) 30% 70%, transparent);
+}
+html.dark .prose hr {
+  background-image: linear-gradient(to right, transparent, var(--neutral-700) 30% 70%, transparent);
+}
+
+/* Images */
+.prose img {
+  display: block; /* Allows margin auto for centering if needed */
+  max-width: 100%;
+  height: auto;
+  margin: 2em auto; /* Centered with vertical spacing */
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+/* Tables */
+.prose .table-wrapper { /* Recommend wrapping tables in this div in MDX for scrolling */
+  overflow-x: auto;
+  margin: 2em 0;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+html.dark .prose .table-wrapper {
+  border-color: var(--neutral-700);
+}
+.prose table {
+  width: 100%;
+  min-width: 600px; /* Example: Force table to be wide enough to need scroll on small screens */
+  border-collapse: collapse;
+  font-size: 0.9em; /* Slightly smaller text in tables */
+  line-height: 1.5;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--neutral-200);
+  padding: 0.75em 1em; /* More padding in cells */
+  text-align: left;
+  vertical-align: top;
+}
+html.dark .prose th,
+html.dark .prose td {
+  border-color: var(--neutral-700);
+}
+.prose th {
+  font-weight: 600; /* Semibold for table headers */
+  background-color: var(--neutral-50);
+  color: var(--neutral-700);
+}
+html.dark .prose th {
+  background-color: var(--neutral-800);
+  color: var(--neutral-200);
+}
+.prose td {
+  color: var(--neutral-700);
+}
+html.dark .prose td {
+  color: var(--neutral-300);
+}
+
+/* KaTeX Math Styling */
+.prose .katex {
+  font-size: 1em; /* Base KaTeX size relative to prose */
+  color: var(--foreground); /* Ensure KaTeX inherits text color */
+}
+.prose .katex-display { /* For block math equations */
+  display: block; /* Changed from flex to allow natural block flow */
+  text-align: center; /* Center the math block */
+  margin: 2em 0;
+  padding: 0.5em 0;
+  overflow-x: auto; /* CRUCIAL for long equations */
+  font-size: 1.05em; /* Slightly larger for display math */
+}
+/* Fix for KaTeX text color in dark mode if it doesn't inherit properly */
+html.dark .prose .katex {
+  color: var(--foreground); /* Foreground is already dark-mode aware */
+}
+
+/* Responsive Prose Adjustments */
+@media (max-width: 768px) { /* md breakpoint */
+  .prose {
+    font-size: 0.95rem; /* Slightly smaller base font on mobile */
+    /* Padding for prose on mobile is better handled by the page wrapper (.contentPageWrapperFullWidth) */
+  }
+  .prose h1 { font-size: 1.875em; }
+  .prose h2 { font-size: 1.5em; }
+  .prose h3 { font-size: 1.25em; }
+
+  .prose pre, .shiki {
+    font-size: 0.85em; /* Smaller code blocks on mobile */
+    padding: 0.75em 1em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* globals.css */
+/* ... other styles ... */
+
+/* Styling for anchor links generated by rehype-autolink-headings */
+.prose h1 .anchor-link,
+.prose h2 .anchor-link,
+.prose h3 .anchor-link,
+.prose h4 .anchor-link,
+.prose h5 .anchor-link,
+.prose h6 .anchor-link {
+  /* If 'append' or 'prepend', it's an inline-block or inline element next to text */
+  display: inline-block; /* Or just rely on its natural flow as an <a> */
+  margin-left: 0.35em; /* Space between heading text and link */
+  font-size: 0.8em;    /* Make the link icon/text smaller */
+  font-weight: normal; /* Reset weight if headings are bold */
+  opacity: 0;          /* Hidden by default, show on hover of heading */
+  transition: opacity 0.2s ease-in-out;
+  color: var(--accent-light); /* Use your accent color */
+  text-decoration: none;
+  vertical-align: middle; /* Align with text better */
 }
+
+html.dark .prose .anchor-link {
+  color: var(--accent-dark);
+}
+
+/* Show anchor link on hover of the PARENT heading */
+.prose h1:hover .anchor-link,
+.prose h2:hover .anchor-link,
+.prose h3:hover .anchor-link,
+.prose h4:hover .anchor-link,
+.prose h5:hover .anchor-link,
+.prose h6:hover .anchor-link {
+  opacity: 0.6;
+}
+
+.prose .anchor-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* If behavior: 'wrap', the heading itself is the link, so no separate .anchor-link needed for the icon */
+/* You might style the heading on hover instead */
+/*
+.prose h1[id]:hover, .prose h2[id]:hover, ... {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-light);
+}
+*/

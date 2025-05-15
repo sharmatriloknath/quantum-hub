@@ -1,0 +1,21 @@
+# Quantum Fundamentals
+
+Basic principles of quantum mechanics for computing.
+
+## Superposition
+
+A qubit can be in a superposition:
+
+$$
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle
+$$
+
+## Measurement Example
+
+```python
+# Simulate a quantum measurement
+import random
+result = random.choices(["0", "1"], weights=[abs(alpha)**2, abs(beta)**2])[0]
+```
+
+See [Quantum Computing Basics](https://en.wikipedia.org/wiki/Quantum_computing).
